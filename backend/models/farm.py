@@ -81,20 +81,39 @@ class FarmAsset(db.Model):
     __tablename__ = 'farm_assets'
     
     id = db.Column(db.Integer, primary_key=True)
-    farm_id = db.Column(db.Integer, db.ForeignKey('farms.id'), nullable=False)
+    farm_id = db.Column(db.Integer, db.ForeignKey('farms.id'), nullable=True)
     
-    name = db.Column(db.String(100), nullable=False)
-    category = db.Column(db.String(50), nullable=False) # e.g., Tractor, Irrigation Pump, Storehouse
+    # Legacy fields
+    name = db.Column(db.String(100))
+    category = db.Column(db.String(50))  # e.g., Tractor, Irrigation Pump, Storehouse
     purchase_value = db.Column(db.Float)
-    purchase_date = db.Column(db.DateTime)
-    
-    condition = db.Column(db.String(50), default='Good') # 'Good', 'Needs Repair', 'Critical'
+    condition = db.Column(db.String(50), default='Good')  # 'Good', 'Needs Repair', 'Critical'
     last_maintenance = db.Column(db.DateTime)
-    
-    # Depreciated value tracker
     current_valuation = db.Column(db.Float)
-    
+
+    # Asset Health Monitoring fields (asset_service.py)
+    asset_id = db.Column(db.String(64), unique=True, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    asset_type = db.Column(db.String(50))
+    asset_name = db.Column(db.String(150))
+    manufacturer = db.Column(db.String(100))
+    model = db.Column(db.String(100))
+    serial_number = db.Column(db.String(100))
+    purchase_date = db.Column(db.DateTime)
+    purchase_price = db.Column(db.Float)
+    health_score = db.Column(db.Float, default=100.0)
+    status = db.Column(db.String(30), default='ACTIVE')
+    alert_threshold_days = db.Column(db.Integer, default=7)
+    next_maintenance_due = db.Column(db.DateTime)
+    total_runtime_hours = db.Column(db.Float, default=0.0)
+    last_telemetry = db.Column(db.Text)
+    predicted_days_to_failure = db.Column(db.Integer)
+    last_maintenance_date = db.Column(db.DateTime)
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationships
+    maintenance_logs = db.relationship('MaintenanceLog', backref='asset', lazy='dynamic', cascade='all, delete-orphan')
 
     def to_dict(self):
         return {
@@ -106,5 +125,9 @@ class FarmAsset(db.Model):
             'purchase_date': self.purchase_date.isoformat() if self.purchase_date else None,
             'condition': self.condition,
             'current_valuation': self.current_valuation,
-            'last_maintenance': self.last_maintenance.isoformat() if self.last_maintenance else None
+            'last_maintenance': self.last_maintenance.isoformat() if self.last_maintenance else None,
+            'asset_id': self.asset_id,
+            'health_score': self.health_score,
+            'status': self.status,
         }
+

@@ -82,3 +82,35 @@ class PriceWatchlist(db.Model):
             "triggered_at": self.triggered_at.isoformat() if self.triggered_at else None,
             "created_at": self.created_at.isoformat() if self.created_at else None
         }
+
+
+class ForwardContract(db.Model):
+    """Agreed future sale terms for a farm's expected harvest."""
+    __tablename__ = 'forward_contracts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    farm_id = db.Column(db.Integer, db.ForeignKey('farms.id'), nullable=False, index=True)
+    batch_id = db.Column(db.Integer, db.ForeignKey('supply_batches.id'), nullable=True, index=True)
+    crop_type = db.Column(db.String(100), nullable=False)
+    estimated_quantity = db.Column(db.Float, nullable=False)
+    locked_price_per_unit = db.Column(db.Float, nullable=False)
+    maturity_date = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(30), nullable=False, default='OPEN', index=True)
+    hedge_ratio = db.Column(db.Float, nullable=False, default=0.0)
+    quality_penalty_clause = db.Column(db.Float, nullable=False, default=0.0)
+    force_majeure_suspended = db.Column(db.Boolean, nullable=False, default=False)
+    climate_risk_discount = db.Column(db.Float, nullable=False, default=0.0)
+    yield_at_risk_pct = db.Column(db.Float, nullable=False, default=0.0)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
+class PriceHedgingLog(db.Model):
+    """History of changes to a farm's recommended or locked hedge ratio."""
+    __tablename__ = 'price_hedging_logs'
+
+    id = db.Column(db.Integer, primary_key=True)
+    farm_id = db.Column(db.Integer, db.ForeignKey('farms.id'), nullable=False, index=True)
+    action = db.Column(db.String(100), nullable=False)
+    new_hedge_ratio = db.Column(db.Float, nullable=False, default=0.0)
+    trigger_reason = db.Column(db.String(255), nullable=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False, index=True)

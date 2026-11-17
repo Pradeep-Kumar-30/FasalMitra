@@ -98,15 +98,15 @@ class AuthService:
         
         return False, "User not found"
 
-            @staticmethod
-            def validate_reset_token(token_value):
-                """Check whether a reset token exists and is still valid."""
-                token_record = Token.query.filter_by(token=token_value, type='reset').first()
+    @staticmethod
+    def validate_reset_token(token_value):
+        """Check whether a reset token exists and is still valid."""
+        token_record = Token.query.filter_by(token=token_value, type='reset').first()
 
-                if not token_record:
-                    return False, "Invalid token"
+        if not token_record:
+            return False, "Invalid token"
 
-                if token_record.is_expired():
-                    return False, "Token has expired"
+        if token_record.is_expired():
+            return False, "Token has expired"
 
-                return True, "Token is valid"
+        return True, "Token is valid"

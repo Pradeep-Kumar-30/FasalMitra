@@ -28,6 +28,7 @@ from .forum import ForumCategory, ForumThread, PostComment, Upvote, UserReputati
 from .knowledge import Question, Answer, KnowledgeVote, Badge, UserBadge, UserExpertise
 from .equipment import Equipment, RentalBooking, AvailabilityCalendar, PaymentEscrow
 from .farm import Farm, FarmMember, FarmAsset, FarmRole
+from .maintenance_log import MaintenanceLog
 from .alert import Alert, AlertPreference
 from .audit_log import AuditLog, UserSession
 from .media_payload import MediaPayload
@@ -55,7 +56,6 @@ from .processing import ProcessingBatch, StageLog, QualityCheck, ProcessingStage
 from .insurance_v2 import CropPolicy, ClaimRequest, PayoutLedger, AdjusterNote, ParametricAutoSettlement
 from .machinery import EngineHourLog, MaintenanceCycle, DamageReport, RepairOrder, AssetValueSnapshot, ComponentWearMap, MaintenanceEscrow
 from .soil_health import SoilTest, FertilizerRecommendation, ApplicationLog, RegenerativeFarmingLog, CarbonMintEvent
-from .vendor_profile import VendorProfile
 from .procurement import ProcurementItem, BulkOrder, OrderEvent
 from .irrigation import (
     IrrigationZone,
@@ -136,6 +136,7 @@ from .ledger import (
     TransactionType,
 )
 from .government_schemes import GovernmentScheme, SchemeApplication, SchemeReminder
+from .maintenance_log import MaintenanceLog
 
 __all__ = [
     # Core
@@ -200,6 +201,7 @@ __all__ = [
     "FarmMember",
     "FarmAsset",
     "FarmRole",
+    "MaintenanceLog",
     # Alerts
     "Alert",
     "AlertPreference",
@@ -340,4 +342,6 @@ __all__ = [
     "GovernmentScheme",
     "SchemeApplication",
     "SchemeReminder",
+    # Maintenance
+    "MaintenanceLog",
 ]
