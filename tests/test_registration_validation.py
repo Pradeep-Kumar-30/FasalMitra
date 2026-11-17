@@ -6,6 +6,13 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from backend.models.user import User
+from backend.utils.validation import sanitize_input
+
+
+class TestSanitizeInput(unittest.TestCase):
+    def test_optional_max_length_preserves_legacy_behavior(self):
+        self.assertEqual(sanitize_input("  <b>hello</b> world  ", 5), "hello")
+        self.assertEqual(sanitize_input("  <b>hello</b> world  "), "hello world")
 
 class TestRegistrationValidation(unittest.TestCase):
     def test_valid_user(self):

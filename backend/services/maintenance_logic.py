@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import math
-from backend.models.equipment import Equipment, MaintenanceCycle, MaintenanceStatus
-from backend.models.machinery import EngineHourLog
+from backend.models.equipment import Equipment
+from backend.models.machinery import EngineHourLog, MaintenanceCycle, MaintenanceStatus
 from backend.models.reliability_log import ReliabilityLog
 from backend.models.soil_health import SoilTest
 from backend.models.weather import WeatherData

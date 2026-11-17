@@ -36,7 +36,7 @@ from backend.utils.i18n import t
 from backend.auth import auth_bp as legacy_auth_bp
 from backend.docs.swagger import swagger_bp
 
-from routes.irrigation_routes import irrigation_bp
+from server.Routes.irrigation_routes import irrigation_bp
 
 from server.Routes.rotation_routes import rotation_bp
 from agri_utils import recommend_fertilizer
@@ -77,7 +77,19 @@ audit_mw = AuditMiddleware(app)
 # Import models after db initialization
 from backend.models import User
 
-CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5500"}})
+CORS(
+    app,
+    resources={
+        r"/*": {
+            "origins": [
+                "http://127.0.0.1:5500",
+                "http://localhost:3001",
+                "http://127.0.0.1:3001",
+            ]
+        }
+    },
+    supports_credentials=True,
+)
 
 app.register_blueprint(crop_bp, url_prefix='/crop')
 # app.register_blueprint(disease_bp)

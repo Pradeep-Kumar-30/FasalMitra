@@ -5,7 +5,6 @@ from .config import config_bp
 from .tasks import tasks_bp
 from .notifications import notifications_bp
 from .assets import assets_bp
-from .logistics import logistics_bp
 from .forum import forum_bp
 from .pools import pools_bp
 from .contributions import contributions_bp
@@ -54,7 +53,6 @@ from .logistics import smart_freight_bp
 from .carbon_v2 import carbon_v2_bp
 from .nutrient_api import nutrient_api_bp
 from .ai_disease import ai_disease_bp
-from .government_scheme import gov_scheme_bp
 from .soil_analytics import soil_analytics_bp
 from .crop_advisory import advisory_bp
 from .irrigation_v2 import irrigation_v2_bp
@@ -72,7 +70,6 @@ api_v1.register_blueprint(config_bp)
 api_v1.register_blueprint(tasks_bp)
 api_v1.register_blueprint(notifications_bp)
 api_v1.register_blueprint(assets_bp)
-api_v1.register_blueprint(logistics_bp)
 api_v1.register_blueprint(forum_bp)
 api_v1.register_blueprint(pools_bp)
 api_v1.register_blueprint(contributions_bp)
@@ -117,25 +114,11 @@ api_v1.register_blueprint(biosecurity_bp, url_prefix="/biosecurity")
 api_v1.register_blueprint(vaults_bp, url_prefix="/vaults")
 api_v1.register_blueprint(arbitrage_bp, url_prefix="/arbitrage")
 api_v1.register_blueprint(spatial_yield_bp, url_prefix="/spatial-yield")
-api_v1.register_blueprint(carbon_bp, url_prefix="/carbon")
 api_v1.register_blueprint(carbon_v2_bp, url_prefix="/carbon-v2")
 api_v1.register_blueprint(ai_disease_bp, url_prefix="/ai-disease")
-api_v1.register_blueprint(gov_scheme_bp, url_prefix="/government-schemes")
 api_v1.register_blueprint(soil_analytics_bp, url_prefix="/soil-analytics")
 api_v1.register_blueprint(gov_schemes_bp, url_prefix="/government-schemes")
 api_v1.register_blueprint(advisory_bp, url_prefix="/crop-advisory")
-api_v1.register_blueprint(gews_bp, url_prefix='/gews')
-api_v1.register_blueprint(transparency_bp, url_prefix='/transparency')
-api_v1.register_blueprint(barter_bp, url_prefix='/barter')
-api_v1.register_blueprint(financials_bp, url_prefix='/financials')
-api_v1.register_blueprint(futures_bp, url_prefix='/futures')
-api_v1.register_blueprint(circular_bp, url_prefix='/circular')
-api_v1.register_blueprint(biosecurity_bp, url_prefix='/biosecurity')
-api_v1.register_blueprint(vaults_bp, url_prefix='/vaults')
-api_v1.register_blueprint(arbitrage_bp, url_prefix='/arbitrage')
-api_v1.register_blueprint(spatial_yield_bp, url_prefix='/spatial-yield')
-api_v1.register_blueprint(carbon_bp, url_prefix='/carbon')
-api_v1.register_blueprint(carbon_v2_bp, url_prefix='/carbon-v2')
 api_v1.register_blueprint(nutrient_api_bp, url_prefix='/nutrient-optimization')
 api_v1.register_blueprint(irrigation_v2_bp, url_prefix='/irrigation-v2')
 api_v1.register_blueprint(translation_bp, url_prefix='/translate')

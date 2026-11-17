@@ -5,9 +5,7 @@ Location: backend/api/v1/carbon.py
 
 from datetime import datetime
 from flask import Blueprint, request, jsonify
-from backend.services.carbon_sequestration_engine import (
-    CarbonSequestrationEngine, CARBON_CREDIT_PRICE_USD, ECO_REWARDS_CATALOG
-)
+from backend.services.carbon_sequestration_engine import CarbonSequestrationEngine
 from backend.extensions import db
 from backend.models.soil_health import RegenerativeFarmingLog, CarbonMintEvent
 from backend.models.sustainability import ESGMarketListing, SustainabilityScore

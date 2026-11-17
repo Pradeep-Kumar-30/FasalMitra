@@ -41,8 +41,8 @@ class User(db.Model):
     
     def __init__(self, username, email, full_name=None, role='farmer', phone=None, location=None):
         import re
-        if not re.match(r"^[a-zA-Z\s]+$", (full_name or username)):
-            raise ValueError("Full Name should only contain letters and spaces")
+        if not re.match(r"^[A-Za-z\s.'-]+$", (full_name or username)):
+            raise ValueError("Full Name contains invalid characters")
         if not email.endswith("@gmail.com"):
             raise ValueError("Please use a @gmail.com address")
             

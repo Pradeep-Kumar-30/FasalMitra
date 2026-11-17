@@ -1,25 +1,4 @@
-// auth.js — FasalMitra Authentication System
-// Migrated from localStorage to Firebase Auth + Firestore
-// Maintains full backward-compatible API so register.js / login.js need minimal changes
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  updateDoc,
-  collection,
-  getDocs,
-  serverTimestamp,
-} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+// auth.js — FasalMitra local account authentication and legacy admin helpers
 
 // ─────────────────────────────────────────────
 // Role constants — single source of truth
@@ -33,6 +12,8 @@ export const ROLES = {
   ADMIN: "admin",
 };
 
+const AUTH_API_BASE = `${window.location.protocol}//${window.location.hostname}:5000/api/auth`;
+
 // Pages each role is allowed to access (filename without path)
 const ROLE_HOME = {
   farmer: "farmer.html",
@@ -44,32 +25,32 @@ const ROLE_HOME = {
 };
 
 // ─────────────────────────────────────────────
-// Firebase initialisation (config fetched from Flask)
+// Firebase remains lazy-loaded for legacy admin profile helpers.
 // ─────────────────────────────────────────────
-let _app, _auth, _db;
+let _app, _db, _firestoreSdk;
 
 async function getFirebaseInstances() {
-  if (_auth && _db) return { auth: _auth, db: _db };
+  if (_db) return { db: _db, firestoreSdk: _firestoreSdk };
 
+  const [appSdk, firestoreSdk] = await Promise.all([
+    import("https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"),
+    import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js"),
+  ]);
   const res = await fetch('http://localhost:5000/api/firebase-config');
   if (!res.ok) throw new Error('Failed to fetch Firebase config');
   
   const config = await res.json();
 
-  _app = initializeApp(config);
-  _auth = getAuth(_app);
-  _db = getFirestore(_app);
+  _app = appSdk.initializeApp(config);
+  _db = firestoreSdk.getFirestore(_app);
+  _firestoreSdk = firestoreSdk;
   window._agriDb = _db;
-  return { auth: _auth, db: _db };
+  return { db: _db, firestoreSdk };
 }
 
 class AuthManager {
   constructor() {
-    // currentUser is populated after observeAuth resolves
     this.currentUser = null;
-    this._ready = false;
-
-    getFirebaseInstances().catch(console.error);
   }
 
   // ── Register ──────────────────────────────
@@ -82,35 +63,31 @@ class AuthManager {
     const pwCheck = this._validatePassword(password);
     if (!pwCheck.valid) return { success: false, message: pwCheck.message };
 
-    try {
-      const { auth, db } = await getFirebaseInstances();
-      const normalizedEmail = email.trim().toLowerCase();
-      const normalizedFullname = fullname.trim();
-      const normalizedRole = role.trim().toLowerCase();
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedFullname = fullname.trim();
+    const normalizedRole = role.trim().toLowerCase();
+    const username = this._createUsername(normalizedEmail);
+    const result = await this._requestAuth("register", {
+      username,
+      email: normalizedEmail,
+      password,
+      full_name: normalizedFullname,
+      role: normalizedRole,
+    });
 
-      const cred = await createUserWithEmailAndPassword(auth, normalizedEmail, password);
+    if (!result.success) return result;
 
-      // Store profile + role in Firestore
-      await setDoc(doc(db, "users", cred.user.uid), {
-        fullname: normalizedFullname,
-        email: normalizedEmail,
-        role: normalizedRole,
-        createdAt: serverTimestamp(),
-        isActive: true,
-        isBanned: false,
-      });
-
-      const userData = { id: cred.user.uid, fullname: normalizedFullname, email: normalizedEmail, role: normalizedRole };
-      this._setSession(userData);
-
-      return {
-        success: true,
-        message: "Account created successfully!",
-        user: userData,
-      };
-    } catch (err) {
-      return { success: false, message: this._friendlyError(err.code) };
+    const loginResult = await this.login(normalizedEmail, password);
+    if (loginResult.success) {
+      return { ...loginResult, message: "Account created successfully!" };
     }
+
+    return {
+      success: true,
+      authenticated: false,
+      message: "Account created. Please sign in to continue.",
+      user: { email: normalizedEmail, fullname: normalizedFullname, role: normalizedRole },
+    };
   }
 
   // ── Login ─────────────────────────────────
@@ -120,65 +97,44 @@ class AuthManager {
       return { success: false, message: validation.message };
     }
 
-    try {
-      const { auth, db } = await getFirebaseInstances();
-      const normalizedEmail = email.trim().toLowerCase();
+    const normalizedEmail = email.trim().toLowerCase();
+    const result = await this._requestAuth("login", {
+      username: normalizedEmail,
+      password,
+    });
 
-      const cred = await signInWithEmailAndPassword(auth, normalizedEmail, password);
+    if (!result.success) return result;
 
-      // Fetch role and profile from Firestore
-      const snap = await getDoc(doc(db, "users", cred.user.uid));
-      if (!snap.exists())
-        return {
-          success: false,
-          message: "User profile not found. Please re-register.",
-        };
-
-      const data = snap.data();
-
-      if (data.isBanned)
-        return {
-          success: false,
-          message: "Your account has been suspended. Contact support.",
-        };
-
-      if (!data.isActive)
-        return {
-          success: false,
-          message: "Account is deactivated. Contact support.",
-        };
-
-      // Update lastLogin in Firestore
-      await updateDoc(doc(db, "users", cred.user.uid), {
-        lastLogin: serverTimestamp(),
-      });
-
-      const userData = {
-        id: cred.user.uid,
-        fullname: data.fullname,
-        email: data.email,
-        role: data.role,
-      };
-      this._setSession(userData);
-
-      return { success: true, message: "Login successful!", user: userData };
-    } catch (err) {
-      return { success: false, message: this._friendlyError(err.code) };
+    const data = result.data;
+    if (!data.user || !data.access_token) {
+      return { success: false, message: "The account service returned incomplete login data." };
     }
+
+    const userData = {
+      id: data.user.id,
+      fullname: data.user.full_name || data.user.fullname,
+      email: data.user.email,
+      role: data.user.role,
+    };
+    this._setSession(userData, data.access_token);
+
+    return { success: true, message: data.message || "Login successful!", user: userData };
   }
 
   // ── Logout ────────────────────────────────
   async logout() {
-    try {
-      const { auth } = await getFirebaseInstances();
-      await signOut(auth);
-      sessionStorage.removeItem("agritech_session");
-      this.currentUser = null;
-      window.location.href = "login.html";
-      return { success: true };
-    } catch (err) {
-      return { success: false, message: err.message };
+    const token = localStorage.getItem("token");
+    if (token) {
+      const result = await this._requestAuth("logout", {}, token);
+      if (!result.success) console.error("Backend logout failed:", result.message);
     }
+
+    sessionStorage.removeItem("agritech_session");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    this.currentUser = null;
+    window.location.href = "login.html";
+    return { success: true };
   }
 
   // ── Check login state ─────────────────────
@@ -206,31 +162,81 @@ class AuthManager {
 
   // ── Admin: get all users ──────────────────
   async getAllUsers() {
-    const { db } = await getFirebaseInstances();
-    const snap = await getDocs(collection(db, "users"));
+    const { db, firestoreSdk } = await getFirebaseInstances();
+    const snap = await firestoreSdk.getDocs(firestoreSdk.collection(db, "users"));
     return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
   }
 
   // ── Admin: ban / unban ────────────────────
   async setBanned(uid, isBanned) {
-    const { db } = await getFirebaseInstances();
-    await updateDoc(doc(db, "users", uid), { isBanned });
+    const { db, firestoreSdk } = await getFirebaseInstances();
+    await firestoreSdk.updateDoc(firestoreSdk.doc(db, "users", uid), { isBanned });
     return { success: true };
   }
 
   // ── Admin: change role ────────────────────
   async setRole(uid, newRole) {
-    const { db } = await getFirebaseInstances();
-    await updateDoc(doc(db, "users", uid), { role: newRole });
+    const { db, firestoreSdk } = await getFirebaseInstances();
+    await firestoreSdk.updateDoc(firestoreSdk.doc(db, "users", uid), { role: newRole });
     return { success: true };
   }
 
   // ─────────────────────────────────────────
   // Private helpers
   // ─────────────────────────────────────────
-  _setSession(user) {
+  async _requestAuth(endpoint, payload, token) {
+    const headers = { "Content-Type": "application/json" };
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    let response;
+    try {
+      response = await fetch(`${AUTH_API_BASE}/${endpoint}`, {
+        method: "POST",
+        headers,
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+    } catch (error) {
+      console.error("Authentication API request failed:", error);
+      return {
+        success: false,
+        message: "Cannot reach the local account service. Start the Flask backend on port 5000 and try again.",
+      };
+    }
+
+    let data;
+    try {
+      data = await response.json();
+    } catch (error) {
+      console.error("Authentication API returned invalid JSON:", error);
+      return { success: false, message: "The account service returned an invalid response." };
+    }
+
+    if (!response.ok || data.status !== "success") {
+      return {
+        success: false,
+        message: data.message || `Account request failed (${response.status}).`,
+      };
+    }
+
+    return { success: true, data };
+  }
+
+  _createUsername(email) {
+    const localPart = email
+      .split("@")[0]
+      .toLowerCase()
+      .replace(/[^a-z0-9._-]/g, "_")
+      .slice(0, 20);
+    const suffix = crypto.randomUUID().replace(/-/g, "").slice(0, 8);
+    return `${localPart || "user"}_${suffix}`;
+  }
+
+  _setSession(user, token) {
     this.currentUser = user;
     sessionStorage.setItem("agritech_session", JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", token);
   }
 
   _validateEmail(email) {
@@ -294,20 +300,6 @@ class AuthManager {
     }
 
     return { valid: true };
-  }
-
-  _friendlyError(code) {
-    const map = {
-      "auth/email-already-in-use": "An account with this email already exists.",
-      "auth/invalid-email": "Please enter a valid email address.",
-      "auth/weak-password": "Password must be at least 6 characters.",
-      "auth/user-not-found": "Invalid email or password.",
-      "auth/wrong-password": "Invalid email or password.",
-      "auth/too-many-requests": "Too many attempts. Please try again later.",
-      "auth/network-request-failed": "Network error. Check your connection.",
-      "auth/invalid-credential": "Invalid email or password.",
-    };
-    return map[code] || "Something went wrong. Please try again.";
   }
 
   // ── UI helper (kept from old auth.js) ─────

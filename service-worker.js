@@ -32,11 +32,25 @@ self.addEventListener("activate", event => {
 
 // Fetch event
 self.addEventListener("fetch", event => {
+  const request = event.request;
+  if (
+    request.method !== "GET" ||
+    new URL(request.url).origin !== self.location.origin
+  ) {
+    return;
+  }
+
   event.respondWith(
-    fetch(event.request).catch(() =>
-      caches.match(event.request).then(response =>
-        response || caches.match(OFFLINE_URL)
-      )
-    )
+    fetch(request).catch(async error => {
+      const cachedResponse = await caches.match(request);
+      if (cachedResponse) return cachedResponse;
+
+      if (request.mode === "navigate") {
+        const offlineResponse = await caches.match(OFFLINE_URL);
+        if (offlineResponse) return offlineResponse;
+      }
+
+      throw error;
+    })
   );
 });

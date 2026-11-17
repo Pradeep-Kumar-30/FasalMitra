@@ -1,7 +1,7 @@
 import google.generativeai as genai
 import os
 from backend.extensions import db
-from backend.models.disease import DiseaseIncident
+from backend.models.gews import DiseaseIncident
 from backend.services.weather_service import WeatherService
 from datetime import datetime
 import logging

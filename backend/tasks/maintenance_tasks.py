@@ -1,6 +1,7 @@
 from datetime import datetime
 from backend.services.maintenance_logic import MaintenanceLogic
-from backend.models.equipment import Equipment, MaintenanceStatus
+from backend.models.equipment import Equipment
+from backend.models.machinery import MaintenanceStatus
 from backend.extensions import db
 from backend.celery_app import celery_app
 import logging

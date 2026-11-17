@@ -7,9 +7,8 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple
 from sqlalchemy import func, and_
 
-from backend.models import (
-    db, User, RiskScoreHistory, InsurancePolicy, ClaimRequest
-)
+from backend.extensions import db
+from backend.models import User, RiskScoreHistory, InsurancePolicy, ClaimRequest
 from backend.utils.risk_calculators import RiskCalculators
 
 

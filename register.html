@@ -164,11 +164,7 @@
       </form>
     </div>
 
-    <!--
-    CHANGED: auth.js uses ES module imports (Firebase SDK via CDN).
-    type="module" is required. register.js and theme.js stay as normal scripts.
-  -->
-    <script src="firebase-config.js"></script>
+    <!-- auth.js is an ES module; register.js and theme.js remain classic scripts. -->
     <script type="module" src="auth.js"></script>
     <script src="register.js"></script>
     <script src="theme.js"></script>

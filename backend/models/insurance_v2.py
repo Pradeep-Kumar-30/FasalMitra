@@ -39,7 +39,11 @@ class CropPolicy(db.Model):
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    claims = db.relationship('ClaimRequest', backref='policy', lazy='dynamic')
+    claims = db.relationship(
+        'backend.models.insurance_v2.ClaimRequest',
+        backref='policy',
+        lazy='dynamic',
+    )
 
     def to_dict(self):
         return {

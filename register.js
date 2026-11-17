@@ -32,6 +32,7 @@ function validateRegisterFields(formData) {
   const fullnameInput = document.getElementById("fullname");
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
+  const confirmPasswordInput = document.getElementById("confirmPassword");
 
   if (!ALLOWED_ROLES.includes(formData.role)) {
     setFieldState(roleInput, false);
@@ -68,10 +69,16 @@ function validateRegisterFields(formData) {
     return "Password must be at least 8 characters and include uppercase, lowercase, and a number";
   }
 
+  if (formData.confirmPassword !== formData.password) {
+    setFieldState(confirmPasswordInput, false);
+    return "Passwords do not match";
+  }
+
   setFieldState(roleInput, true);
   setFieldState(fullnameInput, true);
   setFieldState(emailInput, true);
   setFieldState(passwordInput, true);
+  setFieldState(confirmPasswordInput, true);
   return "";
 }
 
@@ -199,6 +206,7 @@ async function handleRegister(event) {
     fullname: document.getElementById("fullname").value.trim(),
     email: document.getElementById("email").value.trim(),
     password: document.getElementById("password").value,
+    confirmPassword: document.getElementById("confirmPassword").value,
   };
 
   const validationMessage = validateRegisterFields(formData);
@@ -217,8 +225,9 @@ async function handleRegister(event) {
     registerText.textContent = "Account Created!";
     showAuthMessage(result.message, "success");
     setTimeout(() => {
-      // Redirect to the role-specific home page
-      window.location.href = window.authManager.getHomePageForRole(result.user.role);
+      window.location.href = result.authenticated === false
+        ? "login.html"
+        : window.authManager.getHomePageForRole(result.user.role);
     }, 1500);
   } else {
     showAuthMessage(result.message, "error");

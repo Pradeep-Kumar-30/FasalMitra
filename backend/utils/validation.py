@@ -1,13 +1,14 @@
 import re
 
-def sanitize_input(text):
+def sanitize_input(text, max_length=None):
     """Sanitize user input to prevent XSS and injection attacks"""
     if not text or not isinstance(text, str):
         return ""
     
     # Remove HTML tags
     text = re.sub(r'<[^>]+>', '', text)
-    return text.strip()
+    text = text.strip()
+    return text[:max_length] if max_length is not None else text
 
 def validate_required_fields(data, required_fields):
     """Validate that a mapping contains non-empty required fields."""
