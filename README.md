@@ -133,7 +133,7 @@
 ---
 
 ### 🤖 AI Chat Assistant
-<img src="images/ss_09_chat.png" alt="FasalMitra AI Chat" width="100%"/>
+
 
 *Intelligent farming assistant powered by NLP — answers crop queries, provides disease remedies, and gives weather-based advice in multiple languages including Hindi.*
 
@@ -147,7 +147,7 @@
 ---
 
 ### 🔐 Secure Login & Registration
-<img src="images/image2.png" alt="FasalMitra Login Page" width="100%"/>
+
 
 *JWT-secured authentication with drone aerial background. Supports login, registration, forgot password, and OTP verification.*
 
