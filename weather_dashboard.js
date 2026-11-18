@@ -1,3 +1,7 @@
+const WEATHER_API_BASE_URL = window.location.port === '5000'
+    ? ''
+    : 'http://127.0.0.1:5000';
+
 document.addEventListener('DOMContentLoaded', () => {
     // Default location for demo (In real app, fetch from user profile)
     const userLocation = "Punjab, India";
@@ -8,7 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchWeather(location) {
     try {
-        const response = await fetch(`/api/v1/weather/current?location=${encodeURIComponent(location)}`);
+        const response = await fetch(
+            `${WEATHER_API_BASE_URL}/api/v1/weather/current?location=${encodeURIComponent(location)}`
+        );
         const data = await response.json();
 
         if (data.status === 'success') {

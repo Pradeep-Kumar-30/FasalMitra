@@ -1,20 +1,29 @@
 import requests
 import time
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 class WeatherAPIClient:
     """
-    Client for interacting with third-party weather APIs.
-    Includes retry logic and basic error handling.
+    Client for the OpenWeatherMap current-weather API.
     """
-    def __init__(self, api_key=None, base_url="https://api.openweathermap.org/data/2.5"):
-        self.api_key = api_key or "MOCK_API_KEY"
-        self.base_url = base_url
+    def __init__(self, api_key=None, base_url=None):
+        self.api_key = api_key if api_key is not None else os.getenv("WEATHER_API_KEY")
+        self.base_url = (
+            base_url or os.getenv(
+                "WEATHER_API_URL",
+                "https://api.openweathermap.org/data/2.5"
+            )
+        ).rstrip("/")
 
     def get_current_weather(self, location, retries=3):
         """Fetch current weather for a location with automatic retries"""
+        if not self.api_key:
+            logger.error("Weather API key is not configured")
+            return None
+
         params = {
             'q': location,
             'appid': self.api_key,
@@ -23,34 +32,28 @@ class WeatherAPIClient:
         
         for attempt in range(retries):
             try:
-                # Mocking the actual request for demonstration if no key is provided
-                if self.api_key == "MOCK_API_KEY":
-                    return self._get_mock_weather(location)
-                
                 response = requests.get(f"{self.base_url}/weather", params=params, timeout=5)
                 response.raise_for_status()
                 return response.json()
-            except Exception as e:
-                logger.warning(f"Weather API attempt {attempt + 1} failed for {location}: {str(e)}")
-                if attempt < retries - 1:
-                    time.sleep(2 ** attempt) # Exponential backoff
-                else:
-                    logger.error(f"Weather API finalized failure for {location}")
+            except requests.HTTPError as error:
+                status_code = error.response.status_code if error.response else None
+                logger.warning(
+                    "Weather API returned HTTP %s for %s",
+                    status_code,
+                    location
+                )
+                if status_code is not None and status_code < 500:
                     return None
+            except requests.RequestException as error:
+                logger.warning(
+                    "Weather API request attempt %s failed for %s (%s)",
+                    attempt + 1,
+                    location,
+                    type(error).__name__
+                )
 
-    def _get_mock_weather(self, location):
-        """Provides simulated data for development and testing"""
-        import random
-        return {
-            'main': {
-                'temp': random.uniform(15, 45),
-                'humidity': random.uniform(20, 95)
-            },
-            'weather': [{'main': random.choice(['Clear', 'Cloudy', 'Rain', 'Storm']), 'description': 'weather status'}],
-            'wind': {
-                'speed': random.uniform(1, 15),
-                'deg': random.uniform(0, 360)
-            },
-            'name': location,
-            'dt': int(time.time())
-        }
+            if attempt < retries - 1:
+                time.sleep(2 ** attempt)
+
+        logger.error("Weather API failed after %s attempts for %s", retries, location)
+        return None

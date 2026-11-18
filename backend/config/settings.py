@@ -132,7 +132,10 @@ class ServicesConfig:
     celery_broker_url: str = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/0")
     celery_result_backend: str = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
     weather_api_key: Optional[str] = os.environ.get("WEATHER_API_KEY")
-    weather_api_url: str = os.environ.get("WEATHER_API_URL", "https://api.weatherapi.com/v1")
+    weather_api_url: str = os.environ.get(
+        "WEATHER_API_URL",
+        "https://api.openweathermap.org/data/2.5"
+    )
     fx_api_url: str = os.environ.get("FX_API_URL", "https://api.exchangerate-api.com/v4/latest")
     google_translation_api_key: Optional[str] = os.environ.get("GOOGLE_TRANSLATION_API_KEY")
 

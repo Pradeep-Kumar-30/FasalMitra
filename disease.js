@@ -201,31 +201,12 @@ const diseaseDatabase = {
   },
 };
 
-let mobilenetModel;
-
-async function loadMobilenetModel() {
-  try {
-    mobilenetModel = await mobilenet.load();
-  } catch (error) {
-    console.error("Failed to load MobileNet model:", error);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', loadMobilenetModel);
 
 async function isPlantImage(imgElement) {
-  if(!mobilenetModel) {
-    console.warn("Model still loading...");
-    return true;
-  }
-
-  const predictions = await mobilenetModel.classify(imgElement);
-  console.log(predictions);
-  const topLabel = predictions[0].className.toLowerCase();
-
-  const plantKeywords = ["plant", "tree", "leaf", "flower", "crop", "vegetable", "fruit"]
-  return plantKeywords.some((word) => topLabel.includes(word));
+  // Validation removed — backend AI model handles real classification
+  return true;
 }
+
 
 // Mock AI analysis function - simulates disease detection
 /*function simulateAIAnalysis(imageFile) {

@@ -21,7 +21,7 @@ class WeatherService:
             temperature=raw_data['main']['temp'],
             humidity=raw_data['main']['humidity'],
             rainfall=raw_data.get('rain', {}).get('1h', 0) if 'rain' in raw_data else 0,
-            wind_speed=raw_data['wind']['speed'],
+            wind_speed=round(raw_data['wind']['speed'] * 3.6, 1),
             wind_direction=raw_data['wind'].get('deg', 0),
             weather_condition=raw_data['weather'][0]['main']
         )
