@@ -1,6 +1,6 @@
-# 🌾 AgriBot – AI Agriculture Assistant
+# 🌾 FasalMitra – AI Agriculture Assistant
 
-AgriBot is an AI-powered chatbot designed for Indian farmers to get advice on crops, soil, fertilizers, plant diseases, and best farming practices.  
+FasalMitra is an AI-powered chatbot designed for Indian farmers to get advice on crops, soil, fertilizers, plant diseases, and best farming practices.
 It uses Google's **Gemini AI API**, supports **voice input**, and can reply in **English, Hindi, or Punjabi**.
 
 ---

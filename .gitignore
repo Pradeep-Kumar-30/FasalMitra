@@ -75,6 +75,11 @@ datasets/
 *.png
 *.JPG
 
+# Images embedded in the repository README
+!images/logo.png
+!images/image2.png
+!images/ss_*.png
+
 # Model artifacts
 *.h5
 *.pt

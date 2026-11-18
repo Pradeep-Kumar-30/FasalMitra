@@ -304,7 +304,7 @@ class VoiceInputManager {
 }
 
 // -----------------------------------------------------------------------------
-// 3. AGRIBOT HYPERLOCAL VOICE ASSISTANT (Floating PWA & Offline Engine)
+// 3. FASALMITRA HYPERLOCAL VOICE ASSISTANT (Floating PWA & Offline Engine)
 // -----------------------------------------------------------------------------
 class AgriVoiceAssistant {
   constructor() {
@@ -458,7 +458,7 @@ class AgriVoiceAssistant {
     // Generic offline fallback
     const defaults = {
       hi: "🌾 ऑफलाइन कृषि मित्र सलाह:\n• मिट्टी में 50-60% नमी बनाए रखें।\n• कीट या फफूंद दिखने पर 5 मिली नीम तेल प्रति लीटर पानी का छिड़काव करें।\n• नेटवर्क मिलने पर पुनः ऑनलाइन सलाह प्राप्त करें। (किसान हेल्पलाइन: 1800-180-1551)",
-      en: "🌾 Offline AgriBot Advisory:\n• Maintain 50-60% field moisture capacity.\n• Spray 5ml Neem Oil/L water at early signs of sucking pests or leaf spots.\n• Connect to internet for live Gemini diagnosis. (Kisan Helpline: 1800-180-1551)",
+      en: "🌾 Offline FasalMitra Advisory:\n• Maintain 50-60% field moisture capacity.\n• Spray 5ml Neem Oil/L water at early signs of sucking pests or leaf spots.\n• Connect to internet for live Gemini diagnosis. (Kisan Helpline: 1800-180-1551)",
       mr: "🌾 ऑफलाइन शेतकरी सल्ला:\n• जमिनीत योग्य ओलावा राखा.\n• कीड प्रतिबंधासाठी ५ मिली निंबोळी तेल प्रति लिटर फवारा.\n• शेतकरी हेल्पलाइन: १८००-१८०-१५५१",
       te: "🌾 ఆఫ్‌లైన్ రైతు సలహా:\n• నేలలో తగినంత తేమ ఉండేలా చూడండి.\n• పురుగుల నివారణకు వేప నూనె (5ml/L) పిచికారీ చేయండి."
     };
@@ -548,7 +548,7 @@ class AgriVoiceAssistant {
     const cropSelect = document.getElementById('agri-voice-crop-select');
 
     if (cropSelect) this.selectedCrop = cropSelect.value;
-    if (statusText) statusText.innerText = 'Analyzing with AgriBot AI... 🌾';
+    if (statusText) statusText.innerText = 'Analyzing with FasalMitra AI... 🌾';
 
     // Show loading skeleton
     resultsCont.style.display = 'block';
@@ -736,7 +736,7 @@ class AgriVoiceAssistant {
     container.id = 'agri-voice-assistant-container';
     container.innerHTML = `
       <!-- Floating Trigger Button -->
-      <button id="agri-voice-floating-btn" class="agri-floating-mic-btn" title="AgriBot Voice Assistant & Crop Advisory">
+      <button id="agri-voice-floating-btn" class="agri-floating-mic-btn" title="FasalMitra Voice Assistant & Crop Advisory">
         <div class="mic-icon-wrapper">
           <i class="fas fa-microphone"></i>
         </div>
@@ -750,7 +750,7 @@ class AgriVoiceAssistant {
           <div class="header-branding">
             <div class="bot-avatar"><i class="fas fa-seedling"></i></div>
             <div>
-              <h3>🌾 AgriBot Voice Assistant</h3>
+              <h3>🌾 FasalMitra Voice Assistant</h3>
               <div id="agri-bot-network-badge" class="network-badge ${navigator.onLine ? 'online' : 'offline'}">
                 <span class="pulse-dot ${navigator.onLine ? '' : 'offline'}"></span>
                 ${navigator.onLine ? 'Online (Gemini 2.5 Flash)' : 'Offline Mode (Local AI)'}

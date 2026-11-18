@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     messageElement.className = `message ${sender}`;
 
     const time = timeOverride || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const name = sender === 'user' ? 'You' : 'AgriBot';
+    const name = sender === 'user' ? 'You' : 'FasalMitra';
 
     const headerDiv = document.createElement('div');
     headerDiv.className = 'message-header';
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const showTyping = (labelText) => {
     const typing = document.createElement('div');
     typing.className = 'typing-indicator';
-    typing.innerHTML = `<div class="typing-text">${escapeHtml(labelText || 'AgriBot is typing')}</div><span></span><span></span><span></span>`;
+    typing.innerHTML = `<div class="typing-text">${escapeHtml(labelText || 'FasalMitra is typing')}</div><span></span><span></span><span></span>`;
     chatWindow.appendChild(typing);
     chatWindow.scrollTop = chatWindow.scrollHeight;
     return typing;
@@ -492,7 +492,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearImage();
 
     const hasImage = Boolean(attachedImageBase64);
-    const typing = showTyping(hasImage ? 'AgriBot is analyzing your crop photo...' : 'AgriBot is typing...');
+    const typing = showTyping(hasImage ? 'FasalMitra is analyzing your crop photo...' : 'FasalMitra is typing...');
     toggleInput(true);
     const startedAt = Date.now();
 
@@ -570,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     if (!renderSavedHistory()) {
       displayMessage(
-        "Hello! 🌱 I'm AgriBot, your AI farming assistant. You can ask me agriculture questions, seek crop recommendations, or **upload photos of your plants/crops** for disease diagnosis and treatment advice. How can I help you today?",
+        "Hello! 🌱 I'm FasalMitra, your AI farming assistant. You can ask me agriculture questions, seek crop recommendations, or **upload photos of your plants/crops** for disease diagnosis and treatment advice. How can I help you today?",
         'bot',
         undefined,
         false

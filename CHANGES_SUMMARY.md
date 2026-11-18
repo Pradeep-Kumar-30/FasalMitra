@@ -24,7 +24,7 @@ function displayMessage(messageContent, sender) {
   const messageElement = document.createElement('div');
   messageElement.className = `message ${sender}`;
   const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const name = sender === 'user' ? 'You' : 'AgriBot';
+  const name = sender === 'user' ? 'You' : 'FasalMitra';
   
   // Create message header
   const headerDiv = document.createElement('div');
@@ -61,7 +61,7 @@ const addMessage = (who, txt) => {
   const div = document.createElement('div');
   div.className = `message ${who}`;
   const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const name = who === 'user' ? 'You' : 'AgriBot';
+  const name = who === 'user' ? 'You' : 'FasalMitra';
   div.innerHTML = `
     <div class="message-header"><i class="fas fa-${who === 'user' ? 'user' : 'robot'}"></i> ${name}</div>
     <div class="message-text">${format(txt)}</div>

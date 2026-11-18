@@ -35,7 +35,7 @@ def twilio_webhook():
         fallback_twiml = """<?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Message>
-        <Body>🌾 AgriBot: क्षमा करें, सेवा अभी व्यस्त है। कृपया कुछ समय बाद पुनः प्रयास करें। (1800-180-1551)</Body>
+        <Body>🌾 FasalMitra: क्षमा करें, सेवा अभी व्यस्त है। कृपया कुछ समय बाद पुनः प्रयास करें। (1800-180-1551)</Body>
     </Message>
 </Response>"""
         return Response(fallback_twiml, mimetype="application/xml; charset=utf-8")
@@ -287,7 +287,7 @@ def bot_status():
         "supported_languages": SUPPORTED_LANGUAGES,
         "capabilities": {
             "stt": ["openai-whisper", "bhashini-asr", "google-speech-recognition", "web-speech-api"],
-            "llm": ["gemini-2.5-flash", "agribot-expert-engine"],
+            "llm": ["gemini-2.5-flash", "fasalmitra-expert-engine"],
             "tts": ["gtts", "bhashini-tts", "web-speech-synthesis"],
             "multimodal_disease_detection": True,
             "offline_pwa_fallback": True,

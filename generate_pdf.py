@@ -267,7 +267,7 @@ def build():
         ["✅  Solution Module", "⚙️  Technology Used", "📌  Impact"],
         ["Plant Disease Detection",   "CNN (ResNet-style) + Keras\nPlantVillage Dataset",        "Identifies 21 disease classes\nfrom leaf image"],
         ["AI Crop Recommendation",   "Random Forest / ML Model\n+ Soil & climate data",         "Suggests best crop based\non field conditions"],
-        ["AI Chatbot (AgriBot)",     "Google Gemini 2.5 Flash API\n+ Flask SocketIO",            "24/7 multilingual advisory\nin 10 Indian languages"],
+        ["AI Chatbot (FasalMitra)",  "Google Gemini 2.5 Flash API\n+ Flask SocketIO",            "24/7 multilingual advisory\nin 10 Indian languages"],
         ["Govt. Scheme Finder",      "Web scraping + DB\n+ Filter engine",                       "Finds eligible subsidies\nfor each farmer"],
         ["Weather Advisory",         "WeatherAPI + advisory engine\n+ Push notifications",       "Hyperlocal weather alerts\nfor crop planning"],
     ]
@@ -297,7 +297,7 @@ def build():
         "│           FLASK BACKEND  (app.py)           │",
         "│  ┌──────────────┐   ┌─────────────────────┐ │",
         "│  │  REST API    │   │  SocketIO (realtime)│ │",
-        "│  │  /api/v1/    │   │  AgriBot chat       │ │",
+        "│  │  /api/v1/    │   │  FasalMitra chat    │ │",
         "│  └──────┬───────┘   └────────┬────────────┘ │",
         "│         │                    │               │",
         "│  ┌──────▼───────┐   ┌────────▼────────────┐ │",

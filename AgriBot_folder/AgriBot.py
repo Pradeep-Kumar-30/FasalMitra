@@ -9,8 +9,8 @@ genai.configure(api_key="your api key")  # Replace with your Gemini API key
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 # --- Streamlit Page Config ---
-st.set_page_config(page_title="🌾 AgriBot", page_icon="🌱", layout="centered")
-st.markdown("<h1 style='text-align: center;'>🌾 AgriBot – AI Agriculture Assistant</h1>", unsafe_allow_html=True)
+st.set_page_config(page_title="🌾 FasalMitra", page_icon="🌱", layout="centered")
+st.markdown("<h1 style='text-align: center;'>🌾 FasalMitra – AI Agriculture Assistant</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Ask me about crops, soil, fertilizers, diseases & more!</p>", unsafe_allow_html=True)
 
 # --- Custom CSS for Chat Bubbles ---
@@ -61,7 +61,7 @@ def translate_text(text, lang_code):
 # --- Gemini Response ---
 def generate_response(user_query):
     prompt = f"""
-You are AgriBot, an expert AI assistant in agriculture.
+You are FasalMitra, an expert AI assistant in agriculture.
 Answer the following question clearly and simply.
 
 Question: {user_query}
@@ -98,7 +98,7 @@ with st.container():
 if user_input:
     st.session_state.chat_history.append(("user", user_input))
 
-    with st.spinner("AgriBot is thinking..."):
+    with st.spinner("FasalMitra is thinking..."):
         reply = generate_response(user_input)
         translated_reply = translate_text(reply, target_lang)
         st.session_state.chat_history.append(("bot", translated_reply))
@@ -109,4 +109,4 @@ for role, message in st.session_state.chat_history:
     if role == "user":
         st.markdown(f"<div class='chat-bubble user-bubble'>🧑‍🌾 <strong>You:</strong><br>{message}</div>", unsafe_allow_html=True)
     else:
-        st.markdown(f"<div class='chat-bubble bot-bubble'>🤖 <strong>AgriBot:</strong><br>{message}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='chat-bubble bot-bubble'>🤖 <strong>FasalMitra:</strong><br>{message}</div>", unsafe_allow_html=True)

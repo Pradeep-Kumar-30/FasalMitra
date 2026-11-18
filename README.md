@@ -195,7 +195,7 @@ Predicts expected yield (kg/hectare) using historical data, satellite spatial gr
 
 ---
 
-### 💬 5. AgriBot — AI Chatbot
+### 💬 5. FasalMitra — AI Chatbot
 24/7 multilingual farming assistant powered by **Google Gemini 2.5 Flash**.
 - Answers farming questions in **10 Indian languages**
 - Analyzes uploaded plant photos for disease diagnosis
@@ -378,7 +378,7 @@ Input: [Crop Type, Farm Area, Soil Score, Season, Region, Weather]
 | **Scikit-learn** | Crop recommendation, preprocessing |
 | **XGBoost** | Yield prediction, risk scoring |
 | **CatBoost** | Loan default prediction |
-| **Google Gemini 2.5 Flash** | AgriBot LLM, multilingual advisory |
+| **Google Gemini 2.5 Flash** | FasalMitra LLM, multilingual advisory |
 | **OpenCV + Pillow** | Image preprocessing & sanitization |
 
 ### 🗄️ Database & Storage
@@ -658,7 +658,7 @@ ENABLE_MULTILINGUAL_SUPPORT=True
 |--------|---------|
 | ✅ Done | AI Plant Disease Detection (CNN) |
 | ✅ Done | Crop Recommendation (ML) |
-| ✅ Done | AgriBot AI Chatbot (Gemini) |
+| ✅ Done | FasalMitra AI Chatbot (Gemini) |
 | ✅ Done | Government Scheme Finder |
 | ✅ Done | Smart Loan & Insurance Portal |
 | ✅ Done | Community Forum & Knowledge Hub |

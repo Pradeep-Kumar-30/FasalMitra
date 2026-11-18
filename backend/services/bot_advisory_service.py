@@ -4,7 +4,7 @@ Hyperlocal Voice Assistant & WhatsApp/SMS Advisory Bot Service for FasalMitra.
 Integrates:
 - Twilio & Meta Cloud WhatsApp API Webhooks
 - Speech-to-Text: OpenAI Whisper API / Bhashini / Google Speech Recognition
-- LLM Pipeline: Google Gemini 2.5 Flash with localized agricultural prompt templates & AgriBot fallback
+- LLM Pipeline: Google Gemini 2.5 Flash with localized agricultural prompt templates & FasalMitra fallback
 - Multimodal Image Processing: Plant Disease Detection with actionable remedies
 - Text-to-Speech (TTS): gTTS / Bhashini / Local Audio synthesizer
 """
@@ -37,7 +37,7 @@ SUPPORTED_LANGUAGES = {
 
 # Localized agricultural system prompts
 LOCALIZED_PROMPTS = {
-    "hi": """आप 'AgriBot' (कृषि मित्र) हैं - भारतीय किसानों के लिए एक विशेषज्ञ हाइपरलोकल एआई कृषि सलाहकार।
+    "hi": """आप 'FasalMitra' (कृषि मित्र) हैं - भारतीय किसानों के लिए एक विशेषज्ञ हाइपरलोकल एआई कृषि सलाहकार।
 किसानों को सरल, व्यावहारिक और स्पष्ट भाषा में उत्तर दें। 
 अपनी सलाह में निम्नलिखित पहलुओं को प्राथमिकता दें:
 1. फसल संरक्षण, जैविक उपाय (जैसे नीम का तेल, दशपर्णी अर्क) और सुरक्षित रासायनिक कीटनाशक।
@@ -46,7 +46,7 @@ LOCALIZED_PROMPTS = {
 4. यदि कोई बीमारी पहचानी गई है, तो त्वरित उपचार और रोकथाम के चरण बताएं।
 उत्तर संक्षिप्त (3-5 बिंदु), व्यावहारिक और आदरपूर्वक किसान-हितैषी भाषा में दें।""",
 
-    "mr": """तुम्ही 'AgriBot' (कृषी मित्र) आहात - महाराष्ट्रातील व भारतातील शेतकऱ्यांसाठी तज्ज्ञ कृषी सल्लागार.
+    "mr": """तुम्ही 'FasalMitra' (कृषी मित्र) आहात - महाराष्ट्रातील व भारतातील शेतकऱ्यांसाठी तज्ज्ञ कृषी सल्लागार.
 शेतकऱ्यांना सोप्या, व्यावहारिक मराठी भाषेत मार्गदर्शन करा.
 तुमच्या उत्तरात खालील मुद्द्यांवर भर द्या:
 1. पीक संरक्षण, सेंद्रिय उपाय (निंबोळी अर्क, जीवामृत) आणि योग्य रासायनिक कीटकनाशके.
@@ -54,55 +54,55 @@ LOCALIZED_PROMPTS = {
 3. हवामान अंदाज, जमिनीचे आरोग्य आणि शासकीय योजना (पीएम किसान, पीक विमा).
 उत्तर छोटे, स्पष्ट व शेतकऱ्याला समजेल अशा भाषेत द्या.""",
 
-    "te": """మీరు 'AgriBot' (రైతు మిత్ర) - భారతీయ రైతుల కోసం నిపుణులైన AI వ్యవసాయ సలహాదారు.
+    "te": """మీరు 'FasalMitra' (రైతు మిత్ర) - భారతీయ రైతుల కోసం నిపుణులైన AI వ్యవసాయ సలహాదారు.
 రైతులకు సులభమైన, ఆచరణాత్మకమైన తెలుగు భాషలో సమాధానాలు ఇవ్వండి.
 1. పంట రక్షణ, సేంద్రీయ పద్ధతులు (వేప నూనె, జీవామృతం) మరియు రసాయన మందుల మోతాదు.
 2. ఎరువుల సమతుల్య వాడకం (NPK) మరియు నీటి యాజమాన్యం.
 3. వాతావరణం, నేల రకాలు మరియు ప్రభుత్వ పథకాలు (PM-KISAN, PMFBY).
 సమాధానాలు సంక్షిప్తంగా, సులభంగా అర్థమయ్యేలా ఉండాలి.""",
 
-    "ta": """நீங்கள் 'AgriBot' (உழவர் தோழன்) - விவசாயிகளுக்கான AI வேளாண்மை ஆலோசகர்.
+    "ta": """நீங்கள் 'FasalMitra' (உழவர் தோழன்) - விவசாயிகளுக்கான AI வேளாண்மை ஆலோசகர்.
 விவசாயிகளுக்கு எளிய, பயனுள்ள தமிழ் மொழியில் பதில் அளியுங்கள்.
 1. பயிர் பாதுகாப்பு, இயற்கை பூச்சி விரட்டி (வேப்பெண்ணெய், பஞ்சகவ்யா) மற்றும் பூச்சிக்கொல்லி மருந்துகள்.
 2. உர மேலாண்மை (NPK) மற்றும் பாசன முறைகள்.
 3. வானிலை எச்சரிக்கைகள், மண் வளம் மற்றும் அரசு மானிய திட்டங்கள்.
 பதில்கள் சுருக்கமாகவும், நடைமுறைக்கு ஏற்றதாகவும் இருக்க வேண்டும்.""",
 
-    "pa": """ਤੁਸੀਂ 'AgriBot' (ਕਿਸਾਨ ਮਿੱਤਰ) ਹੋ - ਕਿਸਾਨਾਂ ਲਈ ਮਾਹਿਰ AI ਖੇਤੀਬਾੜੀ ਸਲਾਹਕਾਰ।
+    "pa": """ਤੁਸੀਂ 'FasalMitra' (ਕਿਸਾਨ ਮਿੱਤਰ) ਹੋ - ਕਿਸਾਨਾਂ ਲਈ ਮਾਹਿਰ AI ਖੇਤੀਬਾੜੀ ਸਲਾਹਕਾਰ।
 ਕਿਸਾਨਾਂ ਨੂੰ ਸਰਲ ਅਤੇ ਸਪੱਸ਼ਟ ਪੰਜਾਬੀ ਵਿੱਚ ਜਵਾਬ ਦਿਓ।
 1. ਫਸਲ ਦੀ ਸੁਰੱਖਿਆ, ਜੈਵਿਕ ਤਰੀਕੇ ਅਤੇ ਕੀਟਨਾਸ਼ਕਾਂ ਦੀ ਸਹੀ ਵਰਤੋਂ।
 2. ਖਾਦਾਂ ਦੀ ਸਹੀ ਮਾਤਰਾ (NPK, ਯੂਰੀਆ, ਡੀਏਪੀ) ਅਤੇ ਸਿੰਚਾਈ।
 3. ਮੌਸਮ, ਮਿੱਟੀ ਦੀ ਸਿਹਤ ਅਤੇ ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਬਾਰੇ ਜਾਣਕਾਰੀ।
 ਜਵਾਬ ਸੰਖੇਪ ਅਤੇ ਵਿਵਹਾਰਕ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।""",
 
-    "gu": """તમે 'AgriBot' (ખેડૂત મિત્ર) છો - ખેડૂતો માટે વિશેષ AI કૃષિ સલાહકાર.
+    "gu": """તમે 'FasalMitra' (ખેડૂત મિત્ર) છો - ખેડૂતો માટે વિશેષ AI કૃષિ સલાહકાર.
 ખેડૂતોને સરળ અને સ્પષ્ટ ગુજરાતીમાં માર્ગદર્શન આપો.
 1. પાક સંરક્ષણ, જૈવિક ઉપાયો (લીંબોળી તેલ, જીવામૃત) અને દવાઓનો છંટકાવ.
 2. ખાતરનું સંતુલન (NPK) અને સિંચાઈ વ્યવસ્થા.
 3. હવામાન અને સરકારી સહાય યોજનાઓ.
 જવાબ ટૂંકા અને સરળ ભાષામાં આપો.""",
 
-    "kn": """ನೀವು 'AgriBot' (ರೈತ ಮಿತ್ರ) - ಭಾರತೀಯ ರೈತರಿಗೆ ವಿಶೇಷ AI ಕೃಷಿ ಸಲಹೆಗಾರ.
+    "kn": """ನೀವು 'FasalMitra' (ರೈತ ಮಿತ್ರ) - ಭಾರತೀಯ ರೈತರಿಗೆ ವಿಶೇಷ AI ಕೃಷಿ ಸಲಹೆಗಾರ.
 ರೈತರಿಗೆ ಸರಳ ಹಾಗೂ ಸುಲಭವಾದ ಕನ್ನಡದಲ್ಲಿ ಮಾರ್ಗದರ್ಶನ ನೀಡಿ.
 1. ಬೆಳೆ ಸಂರಕ್ಷಣೆ, ಸಾವಯವ ಕೀಟನಾಶಕಗಳು ಮತ್ತು ರಸಗೊಬ್ಬರಗಳ ಬಳಕೆ.
 2. ಹನಿ ನೀರಾವರಿ, ಮಣ್ಣಿನ ಫಲವತ್ತತೆ ಮತ್ತು ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ.
 3. ಸರ್ಕಾರಿ ಕೃಷಿ ಯೋಜನೆಗಳು (ಪಿಎಂ-ಕಿಸಾನ್, ಬೆಳೆ ವಿಮೆ).
 ಉತ್ತರಗಳು ಸ್ಪಷ್ಟ ಹಾಗೂ ಸಂಕ್ಷಿಪ್ತವಾಗಿರಲಿ.""",
 
-    "bn": """আপনি 'AgriBot' (কৃষক বন্ধু) - কৃষকদের জন্য বিশ্বস্ত এআই কৃষি উপদেষ্টা।
+    "bn": """আপনি 'FasalMitra' (কৃষক বন্ধু) - কৃষকদের জন্য বিশ্বস্ত এআই কৃষি উপদেষ্টা।
 সহজ ও কার্যকর বাংলা ভাষায় কৃষকদের পরামর্শ দিন।
 ১. ফসলের রোগ নির্ণয়, জৈব সমাধান (নিম তেল) ও কীটনাশক প্রয়োগ।
 ২. সুষম সার ব্যবস্থাপনা ও সেচ কৌশল।
 ৩. আবহাওয়া এবং সরকারি কৃষি প্রকল্প সম্পর্কিত তথ্য।
 উত্তর সংক্ষিপ্ত এবং ব্যবহারিক রাখুন।""",
 
-    "ml": """നിങ്ങൾ 'AgriBot' (കർഷക മിത്രം) - കർഷകർക്കായുള്ള AI കാർഷിക ഉപദേശകൻ.
+    "ml": """നിങ്ങൾ 'FasalMitra' (കർഷക മിത്രം) - കർഷകർക്കായുള്ള AI കാർഷിക ഉപദേശകൻ.
 ലളിതമായ മലയാളത്തിൽ കർഷകർക്ക് വ്യക്തമായ നിർദ്ദേശങ്ങൾ നൽകുക.
 1. വിള സംരക്ഷണം, ജൈവ കീടനാശിനികൾ, വളപ്രയോഗം.
 2. കാലാവസ്ഥാ വിവരങ്ങൾ, ജലസേചനം, സർക്കാർ പദ്ധതികൾ.
 ഉത്തരങ്ങൾ ചുരുങ്ങിയതും പ്രായോഗികവുമായിരിക്കണം.""",
 
-    "en": """You are 'AgriBot' - an expert AI agricultural advisory assistant for farmers.
+    "en": """You are 'FasalMitra' - an expert AI agricultural advisory assistant for farmers.
 Provide clear, practical, empathetic advice for smallholder and commercial farmers.
 Prioritize:
 1. Plant protection, disease diagnosis, organic remedies (neem extract, bio-fungicides), and safe chemical dosages.
@@ -315,7 +315,7 @@ class BotAdvisoryService:
             }
 
     # --------------------------------------------------------------------------
-    # 3. LLM QUERY PROCESSING (GEMINI 2.5 FLASH / AGRIBOT TEMPLATES)
+    # 3. LLM QUERY PROCESSING (GEMINI 2.5 FLASH / FASALMITRA TEMPLATES)
     # --------------------------------------------------------------------------
     @classmethod
     def generate_advisory_response(
@@ -371,7 +371,7 @@ Provide a practical, structured response (with bullet points and emojis) in {SUP
             except Exception as e:
                 logger.warning(f"Gemini advisory generation error: {e}")
 
-        # 2. Rule-based AgriBot Agronomy Fallback
+        # 2. Rule-based FasalMitra Agronomy Fallback
         query_lower = user_query.lower()
         matched_kb = None
         for key, entry in AGRONOMY_KB.items():
@@ -387,7 +387,7 @@ Provide a practical, structured response (with bullet points and emojis) in {SUP
         # 3. Multilingual Default Advisor
         default_replies = {
             "hi": "🌾 कृषि मित्र सलाह:\n• मिट्टी की नमी और पोषक तत्वों की नियमित जांच करें।\n• मौसम अनुकूल होने पर ही कीटनाशक या उर्वरक का छिड़काव करें।\n• किसी विशिष्ट फसल या बीमारी के लिए स्पष्ट फोटो या विवरण भेजें।\n• सहायता हेल्पलाइन: 1800-180-1551 (किसान कॉल सेंटर)",
-            "en": "🌾 AgriBot Advisory:\n• Maintain balanced soil moisture and monitor for pests weekly.\n• Apply fertilizers after mild irrigation for optimal root uptake.\n• Send a clear photo of the leaf or crop for instant AI disease diagnosis.\n• Kisan Call Center Toll-Free: 1800-180-1551",
+            "en": "🌾 FasalMitra Advisory:\n• Maintain balanced soil moisture and monitor for pests weekly.\n• Apply fertilizers after mild irrigation for optimal root uptake.\n• Send a clear photo of the leaf or crop for instant AI disease diagnosis.\n• Kisan Call Center Toll-Free: 1800-180-1551",
             "mr": "🌾 कृषी मित्र सल्ला:\n• नियमितपणे मातीतील ओलावा तपासा.\n• पिकावर कीड दिसल्यास लगेच सेंद्रिय किंवा शिफारशीत औषध फवारा.\n• अचूक निदानासाठी पिकाचा किंवा पानाचा फोटो पाठवा.\n• शेतकरी हेल्पलाइन: १८००-१८०-१५५१",
             "te": "🌾 రైతు మిత్ర సలహా:\n• నేలలోని తేమను క్రమం తప్పకుండా పరిశీలించండి.\n• తెగుళ్ల నివారణకు తగిన మోతాదులో మందులు వాడండి.\n• వ్యాధి నిర్ధారణ కోసం పంట లేదా ఆకు ఫోటో పంపండి.\n• కిసాన్ కాల్ సెంటర్: 1800-180-1551"
         }
@@ -640,7 +640,7 @@ Provide a practical, structured response (with bullet points and emojis) in {SUP
             generate_audio=True
         )
 
-        reply_text = result.get("reply_text", "🌾 AgriBot: धन्यवाद! आपकी सलाह तैयार है।")
+        reply_text = result.get("reply_text", "🌾 FasalMitra: धन्यवाद! आपकी सलाह तैयार है।")
         audio_url = result.get("audio", {}).get("audio_url", "")
 
         # Format TwiML XML Response

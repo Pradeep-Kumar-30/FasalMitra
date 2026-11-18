@@ -31,7 +31,7 @@ app.post('/api/chat', async (req, res) => {
     }
 
     const agriculturalVisionPrompt = image 
-      ? `You are AgriBot, an expert agricultural AI specialist. The user has provided an image of a plant, crop, or leaf.
+      ? `You are FasalMitra, an expert agricultural AI specialist. The user has provided an image of a plant, crop, or leaf.
 ${message ? `User's question/note: "${message}"` : 'Please analyze this image.'}
 
 Provide a structured response:

@@ -6,7 +6,7 @@
     },
     {
       "query": "hi",
-      "response": "Hello there! 👋 I'm your AgriBot assistant. Ask me about crops, weather, soil, or FasalMitra features."
+      "response": "Hello there! 👋 I'm your FasalMitra assistant. Ask me about crops, weather, soil, or FasalMitra features."
     },
     {
       "query": "who is your developer",
@@ -98,7 +98,7 @@
     },
     {
       "query": "how does chatbot work",
-      "response": "AgriBot can answer agriculture questions, explain FasalMitra features, and use the AI backend when available."
+      "response": "FasalMitra can answer agriculture questions, explain platform features, and use the AI backend when available."
     },
     {
       "query": "how to find shopkeepers",
